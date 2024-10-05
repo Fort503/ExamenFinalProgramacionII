@@ -11,6 +11,7 @@ class PrestamosFrame : public wxFrame
 {
 public:
     PrestamosFrame(wxWindow* parent, const wxString& title);
+     ~PrestamosFrame();
     void actualizarListaPrestamos();
 
 private:

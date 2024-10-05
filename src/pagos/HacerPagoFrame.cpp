@@ -19,9 +19,6 @@ HacerPagoFrame::HacerPagoFrame(wxWindow* parent, Prestamo* prestamo) : wxFrame(p
     wxStaticText* montoLabel = new wxStaticText(panel, wxID_ANY, "Monto del Pago:");
     montoCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxSize(200, -1), 0);
 
-    wxStaticText* fechaLabel = new wxStaticText(panel, wxID_ANY, "Fecha del Pago:");
-    fechaCtrl = new wxDatePickerCtrl(panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxSize(200, -1), wxDP_DROPDOWN);
-
     guardarButton = new wxButton(panel, ID_GuardarPago, "Guardar");
     cancelarButton = new wxButton(panel, ID_CancelarPago, "Cancelar");
 
@@ -31,16 +28,12 @@ HacerPagoFrame::HacerPagoFrame(wxWindow* parent, Prestamo* prestamo) : wxFrame(p
     cancelarButton->SetForegroundColour(FONT_COLOR_BLANCO);
 
     montoLabel->SetFont(NORMAL_FONT);
-    fechaLabel->SetFont(NORMAL_FONT);
     montoCtrl->SetFont(NORMAL_FONT);
-    fechaCtrl->SetFont(NORMAL_FONT);
     guardarButton->SetFont(NORMAL_FONT);
     cancelarButton->SetFont(NORMAL_FONT);
 
     inputSizer->Add(montoLabel, 0, wxALIGN_LEFT | wxALL, 5);
     inputSizer->Add(montoCtrl, 0, wxEXPAND | wxALL, 5);
-    inputSizer->Add(fechaLabel, 0, wxALIGN_LEFT | wxALL, 5);
-    inputSizer->Add(fechaCtrl, 0, wxEXPAND | wxALL, 5);
 
     buttonSizer->Add(guardarButton, 1, wxEXPAND | wxALL, 5);
     buttonSizer->Add(cancelarButton, 1, wxEXPAND | wxALL, 5);
@@ -56,20 +49,16 @@ HacerPagoFrame::HacerPagoFrame(wxWindow* parent, Prestamo* prestamo) : wxFrame(p
     this->SetSize(wxSize(400, 300));
 }
 
-void HacerPagoFrame::OnGuardar(wxCommandEvent& event)
-{
+void HacerPagoFrame::OnGuardar(wxCommandEvent& event) {
     wxString montoStr = montoCtrl->GetValue();
-    wxDateTime fecha = fechaCtrl->GetValue();
 
-    if (montoStr.IsEmpty() || !fecha.IsValid()) {
-        wxMessageBox("Por favor, ingrese el monto y la fecha del pago.", "Error", wxOK | wxICON_ERROR);
+    if (montoStr.IsEmpty()) {
+        wxMessageBox("Por favor, ingrese el monto del pago.", "Error", wxOK | wxICON_ERROR);
         return;
     }
 
     float monto = wxAtof(montoStr);
-    Fecha* fechaPago = new Fecha(fecha.GetDay(), fecha.GetMonth() + 1, fecha.GetYear());
-
-    Pago* pago = new Pago(fechaPago, monto);
+    Pago* pago = new Pago(nullptr, monto); // Aquí debes ajustar la lógica de Pago
     if (prestamo->hacerPago(pago)) {
         wxMessageBox("Pago realizado correctamente.", "Éxito", wxOK | wxICON_INFORMATION);
     } else {
@@ -85,7 +74,6 @@ void HacerPagoFrame::OnGuardar(wxCommandEvent& event)
     }
 }
 
-void HacerPagoFrame::OnCancelar(wxCommandEvent& event)
-{
+void HacerPagoFrame::OnCancelar(wxCommandEvent& event) {
     Close();
 }

@@ -24,9 +24,6 @@ AgregarPrestamoFrame::AgregarPrestamoFrame(wxWindow* parent, const wxString& tit
         clienteCtrl->Append(clientes[i]->getNombre());
     }
 
-    wxStaticText* fechaLabel = new wxStaticText(panel, wxID_ANY, "Fecha de Aprobacion:");
-    fechaCtrl = new wxDatePickerCtrl(panel, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxSize(200, -1), wxDP_DROPDOWN);
-
     wxStaticText* montoLabel = new wxStaticText(panel, wxID_ANY, "Monto Aprobado:");
     montoCtrl = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxSize(200, -1), 0);
 
@@ -39,18 +36,14 @@ AgregarPrestamoFrame::AgregarPrestamoFrame(wxWindow* parent, const wxString& tit
     cancelarButton->SetForegroundColour(FONT_COLOR_BLANCO);
 
     clienteLabel->SetFont(NORMAL_FONT);
-    fechaLabel->SetFont(NORMAL_FONT);
     montoLabel->SetFont(NORMAL_FONT);
     clienteCtrl->SetFont(NORMAL_FONT);
-    fechaCtrl->SetFont(NORMAL_FONT);
     montoCtrl->SetFont(NORMAL_FONT);
     guardarButton->SetFont(NORMAL_FONT);
     cancelarButton->SetFont(NORMAL_FONT);
 
     inputSizer->Add(clienteLabel, 0, wxALIGN_LEFT | wxALL, 5);
     inputSizer->Add(clienteCtrl, 0, wxEXPAND | wxALL, 5);
-    inputSizer->Add(fechaLabel, 0, wxALIGN_LEFT | wxALL, 5);
-    inputSizer->Add(fechaCtrl, 0, wxEXPAND | wxALL, 5);
     inputSizer->Add(montoLabel, 0, wxALIGN_LEFT | wxALL, 5);
     inputSizer->Add(montoCtrl, 0, wxEXPAND | wxALL, 5);
 
@@ -85,13 +78,14 @@ void AgregarPrestamoFrame::OnGuardar(wxCommandEvent& event) {
     Cliente** clientes = Modelo::getClientes();
     Cliente* cliente = clientes[clienteIndex];
 
-    wxDateTime fecha = fechaCtrl->GetValue();
-    Fecha* fechaAprobacion = new Fecha(fecha.GetDay(), fecha.GetMonth(), fecha.GetYear());
+    // Eliminamos la lógica de fecha ya que no se necesita
+    // wxDateTime fecha = fechaCtrl->GetValue();
+    // Fecha* fechaAprobacion = new Fecha(fecha.GetDay(), fecha.GetMonth(), fecha.GetYear());
 
-    Prestamo* prestamo = new Prestamo(Modelo::generarIdPrestamo(), cliente, fechaAprobacion, wxAtof(monto));
+    Prestamo* prestamo = new Prestamo(Modelo::generarIdPrestamo(), cliente, nullptr, wxAtof(monto)); // Aquí se ajusta para no usar fecha
     Modelo::agregarPrestamo(prestamo);
 
-    wxMessageBox("Prestamo agregado correctamente.", "Exito", wxOK | wxICON_INFORMATION);
+    wxMessageBox("Prestamo agregado correctamente.", "Éxito", wxOK | wxICON_INFORMATION);
 
     Close();
 

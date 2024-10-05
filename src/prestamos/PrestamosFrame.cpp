@@ -56,6 +56,11 @@ PrestamosFrame::PrestamosFrame(wxWindow* parent, const wxString& title) : wxFram
     actualizarListaPrestamos();
 }
 
+PrestamosFrame::~PrestamosFrame() {
+    // Implementación del destructor (si es necesario)
+}
+
+
 void PrestamosFrame::OnAgregarPrestamo(wxCommandEvent& event) {
     AgregarPrestamoFrame* Frame = new AgregarPrestamoFrame(this, "Agregar Prestamo");
     Frame->Show(true);
